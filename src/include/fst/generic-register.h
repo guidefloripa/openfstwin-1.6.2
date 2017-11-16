@@ -4,6 +4,8 @@
 #ifndef FST_LIB_GENERIC_REGISTER_H_
 #define FST_LIB_GENERIC_REGISTER_H_
 
+#include <fst/config.h>
+
 #ifndef FST_NO_DYNAMIC_LINKING
 #include <dlfcn.h>
 #include <fst/compat.h>

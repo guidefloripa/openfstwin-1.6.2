@@ -10,3 +10,9 @@
 
 /* Define to 1 if the system has the type `__gnu_cxx::slist<int>'. */
 #define HAVE___GNU_CXX__SLIST_INT_ 1
+
+#if defined(WIN32)
+/* Windows-specific OpenFst config file */
+/* No dynamic registration. */
+#define FST_NO_DYNAMIC_LINKING 1
+#endif /* WINDOWS Specific*/

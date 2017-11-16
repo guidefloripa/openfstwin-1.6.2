@@ -60,9 +60,15 @@ class DefaultCacheStore;
 
 // FST templates.
 
+#if !defined(WIN32)
 template <class Arc, class Compactor, class U = uint32,
     class CompactStore = DefaultCompactStore<typename Compactor::Element, U>,
     class CacheStore = DefaultCacheStore<Arc>>
+#else /* WINDOWS Specific */
+template <class A, class Compactor, class Unsigned = uint32,
+    class CompactStore = DefaultCompactStore<typename Compactor::Element, Unsigned>,
+    class CacheStore = DefaultCacheStore<A>>
+#endif /* WINDOWS Specific */
 class CompactFst;
 
 template <class Arc, class U = uint32>
@@ -80,10 +86,18 @@ class Fst;
 template <class Arc>
 class MutableFst;
 
+#if !defined(WIN32)
 template <class Arc, class Allocator = std::allocator<Arc>>
+#else /* WINDOWS Specific */
+template <class A, class Allocator = std::allocator<A>>
+#endif /* WINDOWS Specific */
 class VectorState;
 
+#if !defined(WIN32)
 template <class Arc, class State = VectorState<Arc>>
+#else /* WINDOWS Specific */
+template <class A, class State = VectorState<A>>
+#endif /* WINDOWS Specific */
 class VectorFst;
 
 template <class Arc, class U = ssize_t>
@@ -97,7 +111,11 @@ class ArcSortFst;
 template <class Arc>
 class ClosureFst;
 
+#if !defined(WIN32)
 template <class Arc, class Store = DefaultCacheStore<Arc>>
+#else /* WINDOWS Specific */
+template <class A, class Store = DefaultCacheStore<A>>
+#endif /* WINDOWS Specific */
 class ComposeFst;
 
 template <class Arc>
@@ -127,8 +145,13 @@ class RandGenFst;
 template <class Arc>
 class RelabelFst;
 
+#if !defined(WIN32)
 template <class Arc, class StateTable = DefaultReplaceStateTable<Arc>,
           class Store = DefaultCacheStore<Arc>>
+#else /* WINDOWS Specific */
+template <class A, class StateTable = DefaultReplaceStateTable<A>,
+          class Store = DefaultCacheStore<A>>
+#endif /* WINDOWS Specific */
 class ReplaceFst;
 
 template <class Arc>
@@ -231,6 +254,7 @@ using IntFilterState = IntegerFilterState<int>;
 template <class FST>
 class Matcher;
 
+#if !defined(WIN32)
 template <class Matcher1, class Matcher2 = Matcher1>
 class NullComposeFilter;
 
@@ -245,6 +269,24 @@ class AltSequenceComposeFilter;
 
 template <class Matcher1, class Matcher2 = Matcher1>
 class MatchComposeFilter;
+
+#else /* WINDOWS Specific */
+
+template <class M1, class M2 = M1>
+class NullComposeFilter;
+
+template <class M1, class M2 = M1>
+class TrivialComposeFilter;
+
+template <class M1, class M2 = M1>
+class SequenceComposeFilter;
+
+template <class M1, class M2 = M1>
+class AltSequenceComposeFilter;
+
+template <class M1, class M2 = M1>
+class MatchComposeFilter;
+#endif /* WINDOWS Specific */
 
 }  // namespace fst
 

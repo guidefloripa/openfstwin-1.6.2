@@ -7,7 +7,13 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <sys/mman.h>
+
+#if !defined(WIN32)
 #include <unistd.h>
+#else /* WINDOWS Specific */
+#include <io.h>
+#include <windows.h>
+#endif /* WINDOWS Specific */
 
 #include <algorithm>
 #include <ios>
@@ -44,7 +50,13 @@ MappedFile *MappedFile::Map(std::istream *istrm, bool memorymap,
     const size_t pos = spos;
     int fd = open(source.c_str(), O_RDONLY);
     if (fd != -1) {
+#if !defined(WIN32)
       const int pagesize = sysconf(_SC_PAGESIZE);
+#else /* WINDOS Specific */
+      SYSTEM_INFO siSysInfo;
+      GetSystemInfo(&siSysInfo);
+      const int pagesize = siSysInfo.dwPageSize;
+#endif /* WINDOS Specific */
       const off_t offset = pos % pagesize;
       const off_t upsize = size + offset;
       void *map =
@@ -77,7 +89,11 @@ MappedFile *MappedFile::Map(std::istream *istrm, bool memorymap,
   std::unique_ptr<MappedFile> mf(Allocate(size));
   auto *buffer = reinterpret_cast<char *>(mf->mutable_data());
   while (size > 0) {
+#if !defined(WIN32)
     const auto next_size = std::min(size, kMaxReadChunk);
+#else /* WINDOS Specific*/
+    const auto next_size = min(size, kMaxReadChunk);
+#endif /* WINDOS Specific*/
     const auto current_pos = istrm->tellg();
     if (!istrm->read(buffer, next_size)) {
       LOG(ERROR) << "Failed to read " << next_size << " bytes at offset "
